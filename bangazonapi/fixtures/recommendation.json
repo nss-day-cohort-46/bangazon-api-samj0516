@@ -1,0 +1,40 @@
+[
+    {
+        "model": "bangazonapi.recommendation",
+        "pk": 4,
+        "fields": {
+            "recommender_id": 4,
+            "customer_id": 5,
+            "product_id": 78
+        }
+    },
+    {
+        "model": "bangazonapi.recommendation",
+        "pk": 5,
+        "fields": {
+            "recommender_id": 5,
+            "customer_id": 4,
+            "product_id": 43
+        }
+    },
+    {
+        "model": "bangazonapi.recommendation",
+        "pk": 6,
+        "fields": {
+            "recommender_id": 6,
+            "customer_id": 7,
+            "product_id": 38
+        }
+    },
+    {
+        "model": "bangazonapi.recommendation",
+        "pk": 4,
+        "fields": {
+            "recommender_id": 7,
+            "customer_id": 6,
+            "product_id": 22
+        }
+    }
+   
+]
+    
