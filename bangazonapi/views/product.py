@@ -12,6 +12,12 @@ from bangazonapi.models import Product, Customer, ProductCategory
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.parsers import MultiPartParser, FormParser
 
+class ProductLikeSerializer(serializers.ModelSerializer):
+    """JSON serializer for customers product likes"""
+    class Meta:
+        model = Customer
+        fields = ('liked',)
+        depth = 1
 
 class ProductSerializer(serializers.ModelSerializer):
     """JSON serializer for products"""
@@ -293,3 +299,32 @@ class Products(ViewSet):
             return Response(None, status=status.HTTP_204_NO_CONTENT)
 
         return Response(None, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    @action(methods=['post', 'delete'], detail=True)
+    def like(self, request, pk=None):
+        """manage products liked by customers"""
+        product = Product.objects.get(pk=pk)
+        customer = Customer.objects.get(user=request.auth.user)
+        if request.method == "POST":
+            try:
+                customer.liked.add(product) 
+                return Response(None, status=status.HTTP_204_NO_CONTENT)
+            except Exception as ex:
+                return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        elif request.method == "DELETE":
+            try:
+                customer.liked.remove(product)
+                return Response(None, status=status.HTTP_204_NO_CONTENT)
+            except Exception as ex:
+                return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+   
+   
+    @action(methods=['get'], detail= False)
+    def liked(self, request):
+        if request.method == "GET":
+            try:
+                customer = Customer.objects.get(user=request.auth.user)
+                serializer = ProductLikeSerializer(customer, context={'request': request})
+                return Response(serializer.data)
+            except Exception as ex:
+                return HttpResponseServerError(ex, status = status.HTTP_404_NOT_FOUND)
