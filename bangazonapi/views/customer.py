@@ -13,7 +13,7 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
         url = serializers.HyperlinkedIdentityField(
             view_name='customer', lookup_field='id'
         )
-        fields = ('id', 'url', 'user', 'phone_number', 'address')
+        fields = ('id', 'url', 'user', 'phone_number', 'address', 'liked')
         depth = 1
 
 
@@ -38,6 +38,7 @@ class Customers(ViewSet):
         customer.user.email = request.data["email"]
         customer.address = request.data["address"]
         customer.phone_number = request.data["phone_number"]
+        customer.liked = request.data["liked"]
         customer.user.save()
         customer.save()
 
